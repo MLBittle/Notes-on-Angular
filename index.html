@@ -84,4 +84,326 @@ Run **ng serve**
 Save yourself and a friend 25%!
 //================================
 //================================
+
+
 **The Basics**
+
+
+# Video 10 Module Introduction
+Learning what Angular does and how the parts work together. 
+We start with what looks like a blank page on the screen. (localHost 4200). 
+
+==================================================
+# Video 11 How an Angular App gets Loaded and Started.
+
+https://files.slack.com/files-pri/T7C870AKS-F05UMGFHMA5/image.png
+image shared by Sarah Sanger 
+
+The developer server hosts our Angular Application. (**ng serve)**
+Content can be changed in the **app.component.html** file in the **app folder** under the **src** tag.
+Bootstrap has been added at the beginning.
+The **index.html** file is the one that the server uses. It pulls from the src component folders.
+
+<app-root></app-root> is a component built in the **src app folder**
+@Component
+selector: 'app-root'
+
+Angular is triggered by the script imports added automatically. index.html is 1st code to be executed. 
+**(main.ts)** platformBrowserDynamic().bootstrapModule(AppModule);
+**(app.module.ts)**
+@NgModule({
+declarations: [
+AppComponent ], 
+providers: []
+bootstrap: [AppComponent]
+*Angular understands the selector and puts the correct component on the screen.*
+
+================
+# Video 12 Components are Important!  
+ 
+The entire application is built on components. The root component is the "container" where we "nest" our components.
+**header
+main area
+sidebar**
+Each component has it's own template, html, styling, own business logic.
+Split up complex application into reusable parts. You can use a component more than once and replicate the style, etc. 
+
+========================
+# Video 13 Create a New Component
+
+import { Component } from `@angular/core`;
+@Component({
+selector: 'app-root',
+templateUrl: './app.component.html',
+styleUrls: ['./app.component.css'] 
+})
+export class AppComponent {
+}
+app.module.ts has the bootstrap instructions. 
+Selectors will not be added to the index.html file, but to the app.component.html file.
+
+Build a backend for our server management application- add new file to src/  app /directory/ create **server** folder
+**A good practice is to name your folder the same as your component name.**
+Each component should have its own folder.
+NAMING CONVENTION
+server.component.ts
+A component is a class, and Angular is able to instantiate it and use it to build objects.
+****in server folder*** attach **Decorator @**
+//create server.component.html//
+
+import { Component } from '@angular/core';
+@Component({
+   selector: 'app-server' //js object stored as metadata//
+   templateUrl: './server,component.html'
+)
+export class ServerComponent {}
+
+//================================
+# Video 14 Understanding the Role of AppModule and Component Declaration
+
+AppModule bundles the different parts into packages.
+**app.module.ts file** // decorator is the @
+
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { FormsModule } from 'angular/forms';
+import { HttpModule } from '@angular/http';
+
+import { AppComponent } from './app.component';
+import { ServerComponent } from './server/server.component';
+
+@NgModule9{
+declarations: [
+AppComponent,
+ServerComponent
+],
+imports: [
+BrowserModule,
+FormsModule,
+HttpModule
+],
+providers: [],
+bootstrap: [AppComponent]
+})
+export class AppModule { }
+//===============================================
+# Video 15 Using Custom Components
+In app.component.html file
+app-server
+<h3>I'm in the AppComponent!</h3>
+<hr>
+<app-server></app-server>
+
+//==============================================
+
+# Video 16 Creating Components the the CLI & Nesting Components
+In a new terminal window - leave the CLI open!
+ng generate component servers (ne folder in app/server)
+
+in servers component folder, override the default text 
+<app-server></app-server>
+<app-server></app-server> // can use as many as we want
+
+update app.module.ts if not automatic
+in servers.componwents.ts for app.servers
+in app.components.html and update selector to servers
+//================================================
+
+# Video 17 Working with Component Templates
+servers.components.ts must have a templateUrl: for external link, or template: '<app-server>
+//more than 3 lines of code needs url
+</app-server> for inline (don't wrap!
+use backtics for JS 
+//============================================
+
+# Video 18 Working with Component Styles
+in app.component.html, add some bootstrap code
+
+<div class="container">
+<div class="row">
+<div class="col-xs-12">
+</div>
+</div>
+</div>
+
+in app.component.css file to override code
+h3
+h3 {
+color: darkblue;
+}
+
+In app.components.ts,  change styles by comementing out the stylesUrls:
+styles: [` //backtic
+h3 {
+color: dodgerblue;
+}
+`// backtic]
+
+//==============================================
+
+# Video 19 Fully Understanding the Component Selector
+
+<app-root>   <servers> @Componentss  [ to select attributes]
+can do <div app-servers></div>
+
+in servers.components.ts, comment out selector:  to select by class
+selector:`.app-server></app-server>, then in app.components.html,
+<div class+"app-servers"></div>
+selecting by id does not work in angular common usage is tocreate elements, and use this
+selector: `app-servers`
+
+//==================================================
+# Video 20 Assignment: Component Basics Problem
+1 Create 2 new Components (manually or  with CLI): 
+WarningAlert and SuccessAlert
+2 Output them beneath each other in the AppComponent
+3 Output a warning or success message in the Components
+4 Style the Components appropriately with red and green text
+Use external or internal templates and styles!
+
+//==================================================
+# Video 21 Assignment Solution
+Manually create in Directory / New Directory / WarningAlert / new file warning-alert.component.ts. In that file, create 
+
+import { Component } from '@angular/core';
+
+@Component(
+selector: "app-warning-alert",
+template: `
+<p>This is a warning...!</p>`
+{) 
+export class WarningAlertComponent { 
+
+}
+
+Using CLI in terminal
+
+ng g c success-alert which creates the folders for you/delete the test 
+
+in success-alert.html  <p>
+You are so successful!
+<p>
+
+In app.component.html.
+<div class='container'>
+<div class="row
+<div class='col-xs-12">
+<ol>
+<li>create 2 components...</li>
+<li>Output them ...appComponent<
+<li>Style red and green text<
+</ol>
+,p> use external or internal templates and styles<
+<p> feel free to create more , or nest, ...<
+<hr>
+<app-warning-alert><
+<app-success-alert><
+div
+div
+div
+error messages - warning alert - not a known element
+
+app.module.ts.
+add import { WarningAlertComponent } from `./warning-alert/warning-alert.component`;
+
+WarningAlertComponent. under NgModule declarations
+
+Inline in warning-alert.component 
+styles: [
+p {
+padding: 20px;
+background color: mistyrose;
+border: 1px solid red;
+} //copy and paste with changes in the success-alert.components.css
+
+# Video 22 What is Databinding?
+
+Databinding is dynamic data, not hardcoded into the template.
+Communication between TS code and The Template that the user sees. OUTPUT DATA
+String Interpolation ( {{ data }} )
+Property Binding ( [property] = "data" ) square brackets around html
+REACT TO USER  EVENTS
+Event Binding ( (event) = 'expression" )
+TWO_WAY BINDING ( [(ngModel)] ="data")
+//=================================================
+# Video 23 String Interpolation
+
+ Server component.ts
+ export class ServerComponent {
+ serverId = 10;
+ serverStatus: = 'offline';
+ getServerStatus() {
+ return this.serverStatus;
+}
+}
+
+server.component.html //double {{}} string interpolation must return a sting.
+<p>Server with ID {{ serverId  }} is  {{ serverStatus () }}</p>
+A tool for outputting data in a template.
+//=================================================
+
+# Video 24 Property Binding
+[] tell Angular that we want to bind property in html, directives, or components so that we can update dynamically. Very easy to interact with DOM at runtime.
+In servers.components.html
+
+<button class="btn btn-primary">Add Server</button>
+[disabled]=""!>Add Server</button>
+
+In servers.component.ts
+templateUrl: './servers.component.html',
+
+export class ServersComponent implements OnInit {
+allowNewServer = false; //boolean
+
+constructor() {
+setTimeout(() => {
+this.allowNewServer = true;
+}, 2000);
+
+ngOnInit() {
+
+}
+}
+
+//================================================
+
+# Video 25 Property Binding vs String Interpolation
+in server.components.htlm
+<button
+class="btn btn-primary"
+[disabled]=!"allowNewServer">Add Server</button>
+<p>{{ allowNewSeerver }}</p>
+
+a boolean can be cast into a string.
+OR we could use property binding 
+<p> {innerText}="allowNewServer"></p>
+
+When to use which??? If you want to output something as text, use string interpolation. If you want to change some property using html or a directive, use property binding.
+**Don't mix the two!**  Adding string interpolation to property binding breaks it.
+
+//=================================================
+# Video 26 Event Binding
+() used for event binding.
+
+servers.components.ts/export Class/under allowNewServer = false
+serverCreation/status = "No server was created.";
+
+servers.components.html
+  (click)="onCreateServer()>Add Server,/button>
+<p>{{ serverCreationStatus }}</p>
+
+servers.components.ts/ underneath ngOnInit/
+onCreateServer() {
+this.serverCreationStatus = "Server was created!";
+}
+
+How do you know to which Properties or Events of HTML Elements you may bind? You can basically bind to all Properties and Events - a good idea is to  `console.log()` the element you're interested in to see which properties and events it offers.
+
+**Important**: For events, you don't bind to onclick but only to click (=> (click)).
+
+The MDN (Mozilla Developer Network) offers nice lists of all properties and events of the element you're interested in. Googling for  `YOUR_ELEMENT properties` or  `YOUR_ELEMENT events` should yield nice results.
+//=================================================
+# Video 27 Passing and Using Data with Event Binding
+
+
+
