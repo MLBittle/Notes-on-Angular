@@ -407,3 +407,376 @@ The MDN (Mozilla Developer Network) offers nice lists of all properties and even
 
 
 
+# Projecting Content into components with ng-content
+
+Complex html code that we want tp pass into the component from outside. server-element template add <ng-content></ng-content> is a hook to tell angular to add information between opening and closing tags.
+//==================================================
+# Understanding the Component Lifecycle
+ngOnInit() { } is a lifecycle hook. when a new component is instantiated, it goes through a few phases.
+ngOnChanges
+ngOnInit
+ngDoCheck
+ngAfterContentInit
+ngAfterContentChecked
+ngAfterViewInit
+ngAfterViewChecked
+ngOnDestroy
+
+//================================================== 
+
+# Seeing Lifecycle Hooks in Action
+server.elements.ts
+in the constructor () {
+console.log(constructor called!);
+}
+implement the needed hooks and import them from `@angular/core;
+
+export class ServerElementComponent
+
+Each one of the lifestyle hooks must be set up, and it's complicated. Max says we don't use this often.
+//==============================================
+# Lifecycle Hooks and Template Access
+@viewChild property 
+nativeElement
+
+==================================================
+# Wrap Up
+Practice what we've learned.
+=========================
+# Assignment: Components & Databinding (Problem)
+Creating a gameControl, Odd and Even components that have buttons to start and stop. 8 steps using things we've learned.
+#=============================================
+
+# Assignments Solution
+
+Max demos one way to solve the problem.
+
+//==================================================
+Course Project - Components and Databinding
+=========================
+# Introduction
+we gained a lot of new knowledge and will now use it in the recipe app.
+//==================================================
+
+# Adding Navigation with Event Binding and ngIf
+
+hook up navigation to load either recipes or shopping list.
+we will learn a better way later on. It takes several steps.
+(I don't really understand why we learn less good ways to do something. It's frustrating!) 
+
+//=============================================
+# Passing Recipe Data with Property Binding
+recipe.item.ts set u to pass recipe from outside.
+add decorator @Input()
+*ngFor="let recipeElof recipes"
+[recipe]="recipeEl
+
+=================================================
+# Passing Data with Event and Property Binding (Combined)
+inform [parent component that a particular recipe was selected
+recipeSelected  = new EventEmitter<void>()
+Don't forget to import from 
+*ngFor
+
+//================================================
+# Allowing the User to Add Ingredients to the Shopping List
+import { FormsModule } from '@angular/forms';
+   imports: [ FormsModule ] // add this to the other imports!    
+})
+...add as little logic as possible into your template. 
+
+#nameInput and #amountInput
+click listeners
+use const instead of let for onAddItem
+
+=================================================================================================
+# Directives Deep Dive
+==============================================
+# Module Introduction
+
+looking at directives and build our own
+**Attribute Directives** sit on elements and look like a normal HTML Attribute (possibly with databinding or event binding), and only affect or change the element they are added to.
+and **Structural Directives** sit on elements and change the DOM. They look like a normal HTML Attribute, but have a leading * for desugaring, and affect a whole area in the DOM adding or removing elements.
+//==================================================
+
+# ngFor and ngIf reacap
+
+can combine on the same element
+
+===========================
+# ngClass and ngStyle Recap
+
+===========================================
+
+# Creating a Basic Attribute Directive
+
+create  new element called basic-highlight directive.ts
+
+import { Directive, ElementRef, OnInit } from 'angular/core';
+@Directive({
+selector: '[appBasicHighlight]'
+})
+export class BasicHighlightDirective implements OnInit {
+constructor(private elementRef: ElementRef) {
+}
+ngOnInit() {
+this.elementRef.nativeElementstyle.backgroundColor = 'green';
+}
+}
+
+And, in app.modules.ts
+ add import { BasicHighlightDirective } from './basic-highlight/basic-highlight.directive;
+and under @NgModule add BasicHighlightDirective
+
+And in app.component.html. add under the last list div,<p appBasicHighlight>Style me with basic directive!</p>
+
+//===========================================
+
+# Using a Renderer to Build a Better Attribute Directive
+
+Angular can render a template without a DOM.
+create a new directive ng g c better-highlight.ts
+
+import { Directive, Renderer2, ElementRef, OnInit } from 'angular/core';
+@Directive({
+selector: '[appBetterHighlight]'
+})
+export class BetterHighlightDirective implements OnInit {
+constructor(private elRef: ElementRef, private renderer: Renderer2) {
+}
+ngOnInit() {
+this.renderer.setStyle(this.elRef.nativeElement, 'backgound-color', 'blue')
+}
+}
+
+And, in app.modules.ts
+ add import { BasicHighlightDirective } from './basic-highlight/basic-highlight.directive;
+and under @NgModule add BetterHighlightDirective
+
+And in app.component.html. add under the last list div,<p appBetterHighlight>Style me with basic directive!</p>
+
+==========================================
+
+# Using HostListenr to Listen to Host Events
+
+React to events
+
+import { Directive, Renderer2, ElementRef, OnInit, HostListener  } from 'angular/core';
+@Directive({
+selector: '[appBetterHighlight]'
+})
+export class BetterHighlightDirective implements OnInit {
+constructor(private elRef: ElementRef, private renderer: Renderer2) {
+}
+ngOnInit() {
+
+}
+@HostListener('mouseenter') mouseover(eventData: Event) {
+this.renderer.setStyle(this.elRef.nativeElement, 'backgound-color', 'blue', false, false');
+}
+@HostListener('mouseleave') mouseleave(eventData: Event) {
+this.renderer.setStyle(this.elRef.nativeElement, 'backgound-color', 'transparent', false, false');
+And, in app.modules.ts
+ add import { BasicHighlightDirective } from './basic-highlight/basic-highlight.directive;
+and under @NgModule add BetterHighlightDirective
+
+And in app.component.html. add under the last list div,<p appBetterHighlight>Style me with basic directive!</p>
+
+==================================================
+
+# Using HostBinding to bind to Host Properties
+a good way to work with an element from within a directive
+
+import { Directive,
+ Renderer2,
+ ElementRef, 
+ OnInit, 
+ HostListener, 
+ HostBinding 
+  } from 'angular/core';
+  
+@Directive({
+selector: '[appBetterHighlight]'
+})
+export class BetterHighlightDirective implements OnInit {
+@HostBinding('style.backgroundcolor') backgroundColor: string = 'transparent';
+constructor(private elRef: ElementRef, private renderer: Renderer2) {
+}
+ngOnInit() {
+
+}
+@HostListener('mouseenter') mouseover(eventData: Event) {
+this.backgrooundColor = 'blue";
+}
+@HostListener('mouseleave') mouseleave(eventData: Event) {
+this.backgrouondColor = 'transparent';
+And, in app.modules.ts
+ add import { BasicHighlightDirective } from './basic-highlight/basic-highlight.directive;
+and under @NgModule add BetterHighlightDirective
+
+And in app.component.html. add under the last list div,<p appBetterHighlight>Style me with basic directive!</p>
+
+==============================================
+
+# Binding to Directive Properties
+using custom property binding
+
+import { Directive,
+ Renderer2,
+ ElementRef, 
+ OnInit, 
+ HostListener, 
+ HostBinding, 
+ Input
+  } from 'angular/core';
+  
+@Directive({
+selector: '[appBetterHighlight]'
+})
+export class BetterHighlightDirective implements OnInit {
+@Input() defaultColor: string = 'transparent';
+@Input() highlightColor: string 'blue';
+@HostBinding('style.backgroundcolor') backgroundColor: string;
+
+constructor(private  ElementRef, private  RendererV2) {
+}
+ngOnInit() {
+this.backgroundColor = this.defaultColor
+}
+@HostListener('mouseenter') ( Event) {
+this.backgrooundColor = this.highlightColor;
+}
+@HostListener('mouseleave') ( Event) {
+this.backgrouondColor = this.defaultColor;
+
+And, in app.modules.ts
+ add import { BasicHighlightDirective } from './basic-highlight/basic-highlight.directive;
+and under @NgModule add BetterHighlightDirective
+
+And in app.component.html. add under the last list div,<p appBasicHighlight>Style me with basic directive!</p>
+<p appBetterHighlight [defaultColor]=" 'yellow'" [highlightColor}= "'red'">Style me with a better directive!</p>
+
+
+===================================================
+
+# What Happens Behind the Scenes on Structural Directives
+
+why the * is needed - angular reads it as a structural directive
+
+=================================================
+
+# Building a Structural Directive
+
+create an unless.directive.ts folder
+
+import { Directive, Input. TemplateRef, ViewContainerRef } from 'angular/core';
+
+@Directive({
+selector: '[appUnless]'
+])
+
+export class UnlessDirective {
+@Input() set unless(condition: boolean) {
+if (!condition) {
+this.vcRef.createEmbeddedView(this.templateRef);
+} else {
+this.vcRef.clear();
+}
+}
+constructor(private templateRef: TemplateRef<any>m private vcRef: ViewContainerRef) ) { }
+}
+
+in app.component.html
+class="list-group-item"
+[ngClass}="{odd: odd% 2 !== 0}"
+[ngStyle]="{backgroundColor: odd % 2 !== 0 ? 'yellow' : 'transparent'}"
+*ngFor="let odd of oddNumbers">
+{{ odd}}
+
+<div *appUnless="onlyOdd">
+<li
+class="list-group-item"
+[ngClass]="{pdd: even % 2 !== 0}"
+[ngStyle]="{backgroundColor: even % 2 !== 0 ? 'yellow' : 'transparent'}"
+*ngFor="let even of evenNumbers">
+{{ even }}
+
+==================================================
+
+# Understanding ngSwitch
+when we have value, can only show one value at a time
+<p *ngSwitchCase=" ">
+
+================================================
+Course Project - Directives
+=========================
+
+# Building and Using a Dropdown Directive
+
+in shared folder, add dropdown.directive.ts
+import { Directive } from '@angular/core':
+
+@Directive({
+selector: '[appDropdown]'
+}
+export class DropdownDirective {
+@HostBinding('class.open') isOpen = false;
+@HostListener('click") toggleOpen()
+this.isOpen = !this.isOpen
+}
+}
+
+In app.module.ts
+add the DropdownDirective to the declarations
+and add the import { 
+
+and add in the header html file <li class="dropdown" appDropdown>
+
+==================================================
+**Using Services and Dependency Injection**
+
+# Module Introduction
+services are another class that can store and manage data.
+
+# Why Would You Need Services?
+
+to log and store data and communicate between components
+
+# Creating a Logging Service
+
+a service to log data is created in the new-account folder called logging.services.ts
+export class LoggingService {
+logStatusChange(status: string)
+console.log('A server status changed, new status: ' + status);
+}}
+in new-accounts.components.ts
+
+# Injecting the Logging Service into Components
+
+Hierarchiacal Injector
+
+logging.services.ts
+export class LoggingService {
+logStatusChange(status: string)
+console.log('A server status changed, new status: ' + status);
+}}
+in new-accounts.components.ts
+
+import { LoggingService ) from '../logging.service'; 
+constructor(private  loggingService: LoggingService) {
+}
+Add to @Component 
+providers: [LoggingService]
+
+this.loggingService.logStatuschange(accountStatus); 
+
+//add constructor to account.components.ts and imports logging service, and provider
+
+==================================================
+# Creating a Data Service
+
+to store and manage data in accounts service.ts
+
+# Understanding the Herarchiacal Injector
+
+use services in the right way!
